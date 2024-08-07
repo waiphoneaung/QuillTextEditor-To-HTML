@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Quill Text Editor</title>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Create Post</h1>
+        <form action="/save" method="post" class="mb-4">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="content">Content</label>
+                <!-- Editor toolbar -->
+                <div class="bg-light border border-bottom-0 rounded-top py-3" id="quilltoolbar1">
+                    <span class="ql-formats">
+                        <select class="ql-size"></select>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-bold"></button>
+                        <button class="ql-italic"></button>
+                        <button class="ql-underline"></button>
+                        <button class="ql-strike"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <select class="ql-color"></select>
+                        <select class="ql-background"></select>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-code-block"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-list" value="ordered"></button>
+                        <button class="ql-list" value="bullet"></button>
+                        <button class="ql-indent" value="-1"></button>
+                        <button class="ql-indent" value="+1"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-link"></button>
+                        <button class="ql-image"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-clean"></button>
+                    </span>
+                </div>
+                <!-- Main toolbar -->
+                <div class="bg-body border rounded-bottom h-400px overflow-hidden" id="quilleditor1">
+                    <br>
+                    <h1>Quill Rich Text Editor</h1>
+                    <br>
+                    <p>Quill is a free, open-source WYSIWYG editor built for the modern web. With its modular architecture and expressive API, it is completely customizable to fit any need.</p>
+                    <br>
+                </div>
+                <input type="hidden" id="content" name="content">
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+        <hr>
+        <hr>
+        
+        <h2>Posts</h2>
+        <div th:each="post : ${posts}" class="mb-4">
+            <h3 th:text="${post.title}" class="text-primary"></h3>
+            <a th:href="@{'/html/' + ${post.htmlFileName}}" target="_blank" class="btn btn-secondary">View Post</a>
+             
+            <a th:href="@{'/edit/' + ${post.id}}" class="btn btn-primary">Edit</a>
+            <form th:action="@{/delete/{id}(id=${post.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+                        
+            <iframe th:src="@{'/html/' + ${post.htmlFileName}}" class="border p-3 rounded bg-light mt-2" width="100%" height="400px"></iframe>
+        </div>
+    </div>
+    
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        var quill = new Quill('#quilleditor1', {
+            modules: {
+                toolbar: '#quilltoolbar1'
+            },
+            theme: 'snow'
+        });
+        
+        document.querySelector('form').onsubmit = function() {
+            document.querySelector('#content').value = quill.root.innerHTML;
+        };
+    </script>
+</body>
+</html>
