@@ -4,6 +4,18 @@
     <title>Edit Post</title>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+   <style>
+     .ql-video {
+       		width: 50%;
+            max-width: 100%;
+            height: 50%;
+            aspect-ratio: 16 / 9;
+    }
+  </style>
+  
+</head>
+    
+    
 </head>
 <body>
     <div class="container mt-5">
@@ -61,7 +73,7 @@
     <button class="ql-clean"></button>
   </span>
 </div>
-                <div id="quilleditor2" style="height: 400px;" class="border rounded"></div>
+                <div id="quilleditor2" style="height: 400px" class="border rounded"></div>
                 <input type="hidden" id="content" name="content">
             </div>
             <button type="submit" class="btn btn-primary">Save</button>
@@ -83,6 +95,31 @@
     	
     	quill.on('text-change', function(delta, source) {
     		  document.querySelector('#content').value = quill.root.innerHTML;
+    		  
+    		  var quillContent = quill.root.innerHTML;
+              var headerContent = `
+                  <!DOCTYPE html>
+                  <html>
+                  <head>
+                      <meta charset="UTF-8">
+                      <style>
+                      .ql-video {
+                          width: 50%;
+                          max-width: 100%;
+                          height: 50%;
+                          aspect-ratio: 16 / 9;
+                      }
+                      </style>
+                  </head>
+                  <body>
+              `;
+              var footerContent = `
+                  </body>
+                  </html>
+              `;
+              var completeHtml = headerContent + quillContent + footerContent;
+              document.querySelector('#content').value = completeHtml;
+              
     		});
     </script>
 </body>
